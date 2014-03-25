@@ -7,14 +7,15 @@ Dotenv.load
 
 post '/restart_dyno' do
   payload = Yajl::Parser.parse(params[:payload])
-  # search payload for dyno id
-  puts payload.inspect
-  # restart specific heroku dyno
-  #Hosakan.restart!(find_dyno(payload))
+  find_dynos(payload).each { |dyno| Hosakan.restart!(dyno) }
 end
 
-def find_dyno(payload)
-  "web.1"
+def find_dynos(payload)
+  payload["events"].map { |event| parse_dyno_name(event["program"]) }.uniq
+end
+
+def parse_dyno_name(program)
+  program.delete "app/"
 end
 
 class Hosakan
