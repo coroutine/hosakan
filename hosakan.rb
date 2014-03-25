@@ -6,7 +6,7 @@ require 'heroku-api'
 Dotenv.load
 
 post '/restart_dyno' do
-  params.inspect
+  puts params.inspect
   #payload = Yajl::Parser.parse(params[:payload])
   #find_dynos(payload).each { |dyno| Hosakan.restart!(dyno) }
 end
