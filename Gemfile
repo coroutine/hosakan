@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
-gem 'yajl'
+gem 'yajl-ruby'
 gem 'dotenv'
 gem 'heroku-api'
