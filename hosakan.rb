@@ -30,9 +30,9 @@ class Hosakan
   def self.restart!(dyno)
     if dyno_up?(dyno)
       connection.post_ps_restart(APP_NAME, 'ps' => dyno)
-      "Dyno #{dyno} restarted...."
+      "Dyno #{dyno} on #{APP_NAME} was restarted...."
     else
-      "Dyno #{dyno} is already up."  # log?
+      "Dyno #{dyno} on #{APP_NAME} is already up."
     end
   end
 
