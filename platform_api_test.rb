@@ -9,9 +9,12 @@ DYNO = "web.1"
 
 heroku = Heroku::API.new(api_key: API_KEY)
 
-heroku.post_ps_stop(APP_NAME, 'ps' => DYNO)
+#heroku.post_ps_stop(APP_NAME, 'ps' => DYNO)
+heroku.post_ps_restart(APP_NAME, 'ps' => DYNO)
 
 h = heroku.get_ps(APP_NAME)
 puts h.data[:body].each {|b| b.inspect}
+
+
 
 
