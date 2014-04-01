@@ -15,7 +15,7 @@ def find_dynos(payload)
 end
 
 def parse_dyno_name(program)
-  program.delete "app/"
+  program.split('/')[1]
 end
 
 class Hosakan
