@@ -1,6 +1,5 @@
 require 'sinatra'
 require 'sinatra/json'
-require 'yajl'
 require 'dotenv'
 require 'heroku-api'
 require 'json'
@@ -12,8 +11,10 @@ get '/' do
 end
 
 post '/restart_dyno' do
-  logger.info "Restart request received: #{params}"
-  payload = Yajl::Parser.parse(params["payload"])
+  raw_payload = params.fetch("payload")
+  payload     = JSON.parse(raw_payload)
+  logger.info "Restart request received: #{payload}"
+
   results = find_dynos(payload).map { |dyno|
     [dyno, Hosakan.restart!(dyno)]
   }
@@ -42,12 +43,12 @@ class Hosakan
     dyno = dyno.to_s.strip
     raise ArgumentError, "Invalid dyno name: #{dyno.inspect}" if dyno.empty?
 
-    puts "Restarting dyno #{dyno}..."
+    puts "Restarting [#{APP_NAME}/#{dyno}]..."
     if dyno_up?(dyno)
       connection.post_ps_restart(APP_NAME, 'ps' => dyno)
-      body = "Dyno #{dyno} on #{APP_NAME} was restarted!"
+      body = "Dyno [#{APP_NAME}/#{dyno}] was restarted!"
     else
-      body = "Dyno #{dyno} on #{APP_NAME} is down.  Not going to kick it any harder."
+      body = "Dyno [#{APP_NAME}/#{dyno}] is down.  Not going to kick it any harder."
     end
     puts body # let's see this in the syslog!
     body      # implicit return shows this to the HTTP client
