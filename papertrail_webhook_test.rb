@@ -20,7 +20,7 @@ class PapertrailWebhookRequest
           :html_edit_url => "https://papertrailapp.com/searches/42/edit"
         },
         "events" => [
-          { "program" => "postfix/smtpd",
+          { "program" => "appname/web.1",
             "display_received_at" => "May 06 12:28:00",
             "source_ip" => "1.2.3.4",
             "source_name" => "somehost1",
@@ -32,7 +32,7 @@ class PapertrailWebhookRequest
             "id" => 3241602919305216,
             "hostname" => "somehost1" },
 
-          { "program" => "production.log",
+          { "program" => "appname/web.1",
             "display_received_at" => "May 06 12:28:30",
             "source_ip" => "4.5.6.7",
             "source_name" => "somehost4",
@@ -49,7 +49,7 @@ class PapertrailWebhookRequest
       }
     }
 
-    r = connection.post do |req|
+    connection.post do |req|
       req.url 'http://localhost:4567/restart_dyno'
       req.body = {
         :payload  => Yajl::Encoder.encode(results['payload'])

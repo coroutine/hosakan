@@ -1,13 +1,24 @@
 require 'sinatra'
+require 'sinatra/json'
 require 'yajl'
 require 'dotenv'
 require 'heroku-api'
+require 'json'
 
 Dotenv.load
 
+get '/' do
+  "I'm listening."
+end
+
 post '/restart_dyno' do
+  logger.info "Restart request received: #{params}"
   payload = Yajl::Parser.parse(params["payload"])
-  find_dynos(payload).each { |dyno| Hosakan.restart!(dyno) }
+  results = find_dynos(payload).map { |dyno|
+    [dyno, Hosakan.restart!(dyno)]
+  }
+
+  json results: results
 end
 
 def find_dynos(payload)
@@ -28,23 +39,30 @@ class Hosakan
   end
 
   def self.restart!(dyno)
+    dyno = dyno.to_s.strip
+    raise ArgumentError, "Invalid dyno name: #{dyno.inspect}" if dyno.empty?
+
+    puts "Restarting dyno #{dyno}..."
     if dyno_up?(dyno)
       connection.post_ps_restart(APP_NAME, 'ps' => dyno)
-      "Dyno #{dyno} on #{APP_NAME} was restarted...."
+      body = "Dyno #{dyno} on #{APP_NAME} was restarted!"
     else
-      "Dyno #{dyno} on #{APP_NAME} is already up."
+      body = "Dyno #{dyno} on #{APP_NAME} is down.  Not going to kick it any harder."
     end
+    puts body # let's see this in the syslog!
+    body      # implicit return shows this to the HTTP client
   end
 
   private
 
   def self.dyno_up?(dyno)
-    status = connection.get_ps(APP_NAME)
-    status.data[:body].any? { |st| st[:process] == dyno && st[:state] == "down" }
+    dyno = dyno.to_s.strip
+    raise ArgumentError, "Invalid dyno name: #{dyno.inspect}" if dyno.empty?
+
+    statuses = connection.get_ps(APP_NAME).data.fetch(:body)
+    status   = statuses.find { |st| st.fetch("process") == dyno }
+    raise NameError, "No such dyno on heroku: #{dyno} >>> #{statuses}" unless !!status
+
+    status.fetch("state").start_with? "up"
   end
-
 end
-
-
-
-

@@ -19,3 +19,6 @@ Notes regarding the webhooks can be found at: [Papertrail Webhooks](http://help.
 	* Heroku App Name
 	* Heroku Api Key - Found at [User Dashboard](https://dashboard.heroku.com/account)
 
+
+## Testing
+`rake test`
