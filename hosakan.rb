@@ -23,11 +23,25 @@ post '/restart_dyno' do
 end
 
 def find_dynos(payload)
-  payload["events"].map { |event| parse_dyno_name(event["program"]) }.uniq
+  payload["events"].map { |event| parse_dyno_name(event["program"], event["message"]) }.uniq
 end
 
-def parse_dyno_name(program)
-  program.split('/')[1]
+def parse_dyno_name(program, message)
+  reporting_dyno = program.split('/')[1]
+
+  if reporting_dyno == "router"
+    extract_dyno_from_message(message)
+  else
+    reporting_dyno
+  end
+end
+
+def extract_dyno_from_message(message)
+   pairs = message.split(/\s+/).map { |p| p.split("=") }
+   _, dyno_name = pairs.select { |key, *rest| key == "dyno" }.flatten
+
+   puts "Falling back to message-parsed dyno name [#{dyno_name}] instead of 'router'..."
+   dyno_name
 end
 
 class Hosakan
