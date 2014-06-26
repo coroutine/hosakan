@@ -2,6 +2,8 @@
 
 _"Hosa-kan" - Japanese for "Aide"_
 
+![screenshot of hosakan restarting a dyno](http://i.imgur.com/kn87F4v.png)
+
 ## Description
 
 Tiny Sinatra application designed to receive [Papertrail](http://papertrailapp.com/ "Papertrail") webhooks, and restart failing dynos.
