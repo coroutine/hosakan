@@ -10,6 +10,9 @@ Given the generic nature of webhooks from Papertrail, the application should be 
 
 Notes regarding the webhooks can be found at: [Papertrail Webhooks](http://help.papertrailapp.com/kb/how-it-works/web-hooks/ "Webhooks")
 
+## How it works
+Hosakan listens on `/restart_dynos` for papertrail webhook data (see a [sample Papertrail payload here](sample_payload.rb)).  We attempt to parse heroku dyno names out of the Papertrail log payload and then restart the dynos by name using the Heroku API.
+
 ## Setup
 1. `bundle`
 
