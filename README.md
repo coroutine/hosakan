@@ -23,6 +23,12 @@ Notes regarding the webhooks can be found at: [Papertrail Webhooks](http://help.
 ## Testing
 `rake test`
 
+### Testing Papertrail webhooks before deploying
+Try using [ngrok](https://ngrok.com/) to expose your local Sinatra port (probably 4567) to the outside world and then point a Papertrail webhook at that URL.  You should be able to trigger a test webhook out of Papertrail and see it show up in your Hosakan logs.
+
+## Deployment
+Hosakan is intended to run as a Heroku web app, just be sure to set your environment variables `HEROKU_APP_NAME` and `HEROKU_API_KEY` so that it can remotely restart your main app when it receives webhooks from Papertrail.  You can surely run it anywhere else you could deploy Sinatra apps as well.
+
 ## License
 [MIT License](LICENSE.md)
 
