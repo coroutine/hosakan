@@ -35,3 +35,5 @@ Hosakan is intended to run as a Heroku web app, just be sure to set your environ
 ## Contributors
 * Mark Morris
 * Daniel Pritchett
+
+![Coroutine](https://avatars3.githubusercontent.com/u/93263?s=140)
