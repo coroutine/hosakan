@@ -22,3 +22,10 @@ Notes regarding the webhooks can be found at: [Papertrail Webhooks](http://help.
 
 ## Testing
 `rake test`
+
+## License
+[MIT License](LICENSE.md)
+
+## Contributors
+* Mark Morris
+* Daniel Pritchett
