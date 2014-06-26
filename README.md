@@ -2,7 +2,7 @@
 
 _"Hosa-kan" - Japanese for "Aide"_
 
-![screenshot of hosakan restarting a dyno](http://i.imgur.com/kn87F4v.png)
+![screenshot of hosakan restarting a dyno](http://i.imgur.com/Rt9uJCb.png)
 
 ## Description
 
