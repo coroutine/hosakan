@@ -30,6 +30,7 @@ post '/reload_cache' do
   results = extract_paths(payload).map do |(host, path)|
     # Forces a reload of the offending cache entry based on the path that was
     # found.
+    logger.info "Reloading #{path} on #{host}"
     [path, `curl 'https://#{host}#{path}' -H 'Pragma: no-cache' -H 'Accept-Encoding: gzip, deflate, sdch' -H 'Accept-Language: en-US,en;q=0.8,sq;q=0.6' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9[ ] mage/webp,*/*;q=0.8' -H 'Cache-Control: no-cache' -H 'Connection: keep-alive' --compressed`]
   end
 
