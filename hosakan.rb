@@ -25,7 +25,7 @@ end
 post '/reload_cache' do
   raw_payload = params.fetch("payload")
   payload = JSON.parse(raw_payload)
-  logger.info "Log reload request received: #{payload}"
+  logger.info "Log reload request received..."
 
   results = extract_paths(payload).map do |(host, path)|
     # Forces a reload of the offending cache entry based on the path that was
@@ -38,7 +38,10 @@ post '/reload_cache' do
 end
 
 def extract_paths(payload)
-  payload["events"].map { |event| event["message"] =~ /path="(.+)" host=(.+) request"/ && [$2, $1]}.uniq.compact
+  payload["events"].map do |event|
+    logger.info("Extracting host and path from #{event["message"]}")
+    event["message"] =~ /path="(.+)" host=(.+) request/ && [$2, $1]
+  end.uniq.compact
 end
 
 def find_dynos(payload)
