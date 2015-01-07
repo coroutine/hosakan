@@ -38,11 +38,11 @@ post '/reload_cache' do
 end
 
 def extract_paths(payload)
-  payload["events"].map { |event| event["message"] =~ /path="(.+)" host=(.+) request"/ && [$2, $1]}.uniq
+  payload["events"].map { |event| event["message"] =~ /path="(.+)" host=(.+) request"/ && [$2, $1]}.uniq.compact
 end
 
 def find_dynos(payload)
-  payload["events"].map { |event| parse_dyno_name(event["program"], event["message"]) }.uniq
+  payload["events"].map { |event| parse_dyno_name(event["program"], event["message"]) }.uniq.compact
 end
 
 def parse_dyno_name(program, message)
