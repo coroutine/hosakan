@@ -22,6 +22,24 @@ post '/restart_dyno' do
   json results: results
 end
 
+post '/reload_cache' do
+  raw_payload = params.fetch("payload")
+  payload = JSON.parse(raw_payload)
+  logger.info "Log reload request received: #{payload}"
+
+  results = extract_paths(payload).map do |(host, path)|
+    # Forces a reload of the offending cache entry based on the path that was
+    # found.
+    [path, `curl 'https://#{host}#{path} -H 'Pragma: no-cache' -H 'Accept-Encoding: gzip, deflate, sdch' -H 'Accept-Language: en-US,en;q=0.8,sq;q=0.6' -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9[ ] mage/webp,*/*;q=0.8' -H 'Cache-Control: no-cache' -H 'Connection: keep-alive' --compressed`]
+  end
+
+  json results: results
+end
+
+def extract_paths(payload)
+  payload["events"].map { |event| event["message"] =~ /path="(.+)" host=(.+) request"/ && [$2, $1]}.uniq
+end
+
 def find_dynos(payload)
   payload["events"].map { |event| parse_dyno_name(event["program"], event["message"]) }.uniq
 end
