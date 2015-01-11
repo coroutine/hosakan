@@ -13,7 +13,7 @@ end
 post '/restart_dyno' do
   raw_payload = params.fetch("payload")
   payload     = JSON.parse(raw_payload)
-  logger.info "Restart request received: #{payload}"
+  #logger.info "Restart request received: #{payload}" --Temporarily disabled, spamming the Papertrail log
 
   results = find_dynos(payload).map { |dyno|
     [dyno, Hosakan.restart!(dyno)]
