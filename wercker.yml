@@ -1,0 +1,26 @@
+box: wercker/rvm
+build:
+  steps:
+    - bundle-install
+    - script:
+        name: echo ruby information
+        code: |
+          echo "ruby version $(ruby --version) running"
+          echo "from location $(which ruby)"
+          echo -p "gem list: $(gem list)"
+  after-steps:
+    - hipchat-notify:
+        token: $HIPCHAT_TOKEN
+        room-id: 1940641
+        from-name: wercker
+deploy:
+  steps:
+    - heroku-deploy:
+        version: 2.1.7
+        key-name: HOSAKAN_KEY
+        keep-repository: true
+  after-steps:
+    - hipchat-notify:
+        token: $HIPCHAT_TOKEN
+        room-id: 1940641
+        from-name: wercker
