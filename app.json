@@ -1,0 +1,15 @@
+{
+    "name": "Hokasan",
+    "description": "Tiny Sinatra application designed to receive Papertrail webhooks, and restart failing dynos.",
+    "repository": "https://github.com/coroutine/hosakan",
+    "env": {
+        "HEROKU_APP_NAME": {
+            "description": "The main Heroku app to restart",
+            "value": ""
+        },
+        "HEROKU_API_KEY": {
+            "description": "Your Heroku API key, found on the user dashboard",
+            "value": ""
+        }
+    }
+}
