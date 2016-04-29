@@ -34,6 +34,8 @@ __Note__:  Hosakan doesn't care why you sent it a log entry, it'll just restart 
 Try using [ngrok](https://ngrok.com/) to expose your local Sinatra port (probably 4567) to the outside world and then point a Papertrail webhook at that URL.  You should be able to trigger a test webhook out of Papertrail and see it show up in your Hosakan logs.
 
 ## Deployment
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 Hosakan is intended to run as a Heroku web app, just be sure to set your environment variables `HEROKU_APP_NAME` and `HEROKU_API_KEY` so that it can remotely restart your main app when it receives webhooks from Papertrail.  You can surely run it anywhere else you could deploy Sinatra apps as well.
 
 ## License
